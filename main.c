@@ -11,6 +11,16 @@ struct InputBuffer_t {
 
 typedef struct InputBuffer_t InputBuffer;
 
+enum MetaCommandResult_t{
+    META_COMMAND_SUCCESS,
+    META_COMMAND_UNRECONGNIZED_COMMAND
+};
+typedef enum MetaCommandResult_t MetaCommandResult;
+
+enum PrepareResult_t {PREPARE_SUCCESS, PREPARE_UNRECONGIZED_STATEMENT};
+typedef enum PrepareResult_t PrepareResult;
+
+
 InputBuffer* new_input_buffer() {
     InputBuffer* input_buffer = malloc(sizeof(InputBuffer));
     input_buffer->buffer = NULL;
@@ -49,6 +59,27 @@ int main(int argc, char* argv[]) {
             exit(EXIT_SUCCESS);
         } else {
             printf("Unrecognized command '%s'.\n", input_buffer->buffer);
+            if (input_buffer->buffer[0] == '.') {
+                switch (do_meta_command(input_buffer)){
+                    case (META_COMMAND_SUCCESS):
+                        continue;
+                    case (META_COMMAND_UNRECONGNIZED_COMMAND):
+                        printf("Unrecognized keyword at start of '%s'.\n", input_buffer->buffer);
+                        continue;
+                }
+            }
         }
+
+        Statement statement;
+        switch(prepare_statement(input_buffer, &statement)) {
+            case (PREPARE_SUCCESS):
+                break;
+            case (PREPARE_UNRECONGIZED_STATEMENT):
+                printf("Unrecognized keyword at start of '%s'.\n", input_buffer->buffer))
+                continue;
+        }
+
+        execute_statement(&statement);
+        printf("Executed.\n");
     }
 }
