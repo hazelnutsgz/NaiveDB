@@ -10,19 +10,21 @@ typedef struct Row_t Row;
 struct Pager_t {
     int file_desciptor;
     uint32_t file_length;
+    uint32_t num_pages;
     void* pages[TABLE_MAX_PAGES];
 };
 typedef struct Pager_t Pager;
 
 struct Table_t {
-    uint32_t num_row;
     Pager* pager;
+    uint32_t root_page_num;
 };
 typedef struct Table_t Table;
 
 struct Cursor_t {
     Table* table;
-    uint32_t row_num;
+    uint32_t page_num;
+    uint32_t cell_num;
     bool end_of_table;
 };
 typedef struct Cursor_t Cursor;

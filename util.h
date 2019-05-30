@@ -1,5 +1,3 @@
-
-
 enum MetaCommandResult_t{
     META_COMMAND_SUCCESS,
     META_COMMAND_UNRECONGNIZED_COMMAND
